@@ -1,0 +1,171 @@
+# Welcome Banner
+print("===========================")
+print(" Welcome to Group 27 Calculator ")
+print("===========================")
+
+# Password protection
+password = "GROUP27"
+user_input = input("Enter Password Here To Continue: ")
+
+if user_input != password:
+    print("Incorrect password. Access denied.")
+    exit()
+else:
+    print("Access granted. Welcome!\n")
+
+# Import math module
+import math
+
+# Initialize variables
+history = []       # to keep track of previous calculations
+last_result = None # to store last calculation result
+
+# Functions
+def add(a, b):
+    return a + b
+
+def subtract(a, b):
+    return a - b
+
+def multiply(a, b):
+    return a * b
+
+def divide(a, b):
+    if b != 0:
+        return a / b
+    else:
+        print("Cannot divide by zero!")
+        return None
+
+def square_root(a):
+    if a >= 0:
+        return math.sqrt(a)
+    else:
+        print("Cannot find square root of a negative number!")
+        return None
+
+def power(a, b):
+    return math.pow(a, b)
+
+def logarithm(a):
+    if a > 0:
+        return math.log(a)
+    else:
+        print("Logarithm undefined for non-positive numbers!")
+        return None
+
+def sine(a):
+    return math.sin(math.radians(a))  # converts degrees to radians
+
+def cosine(a):
+    return math.cos(math.radians(a))
+
+def tangent(a):
+    return math.tan(math.radians(a))
+
+def factorial(a):
+    if a >= 0 and int(a) == a:
+        return math.factorial(int(a))
+    else:
+        print("Factorial undefined for negative or non-integer numbers!")
+        return None
+
+# Menu loop
+while True:
+    print("\nMenu:")
+    print("1. Add")
+    print("2. Subtract")
+    print("3. Multiply")
+    print("4. Divide")
+    print("5. Square Root")
+    print("6. Power")
+    print("7. Logarithm")
+    print("8. Sine")
+    print("9. Cosine")
+    print("10. Tangent")
+    print("11. Factorial")
+    print("12. View History")
+    print("13. Exit")
+
+    choice = input("Choose an option (1-13): ")
+
+    if choice == '13':
+        print("Thank you for using Group 27 Calculator! Goodbye!")
+        break
+
+    elif choice == '12':
+        print("\nCalculation History:")
+        if history:
+            for item in history:
+                print(item)
+        else:
+            print("No calculations yet.")
+
+    elif choice in ['1', '2', '3', '4', '6']:  # operations needing two numbers
+        use_last = input("Use last result as first number? (y/n): ")
+        if use_last.lower() == 'y' and last_result is not None:
+            num1 = last_result
+        else:
+            num1 = float(input("Enter first number: "))
+        num2 = float(input("Enter second number: "))
+
+        if choice == '1':
+            result = add(num1, num2)
+            op = '+'
+        elif choice == '2':
+            result = subtract(num1, num2)
+            op = '-'
+        elif choice == '3':
+            result = multiply(num1, num2)
+            op = '*'
+        elif choice == '4':
+            result = divide(num1, num2)
+            op = '/'
+        elif choice == '6':
+            result = power(num1, num2)
+            op = '^'
+
+        if result is not None:
+            print("Result:", result)
+            last_result = result
+            record = f"{num1} {op} {num2} = {result}"
+            history.append(record)
+            with open("calc_history.txt", "a") as file:
+                file.write(record + "\n")
+
+    elif choice in ['5', '7', '8', '9', '10', '11']:  # single number functions
+        use_last = input("Use last result? (y/n): ")
+        if use_last.lower() == 'y' and last_result is not None:
+            num = last_result
+        else:
+            num = float(input("Enter number: "))
+
+        if choice == '5':
+            result = square_root(num)
+            desc = f"√{num}"
+        elif choice == '7':
+            result = logarithm(num)
+            desc = f"log({num})"
+        elif choice == '8':
+            result = sine(num)
+            desc = f"sin({num})"
+        elif choice == '9':
+            result = cosine(num)
+            desc = f"cos({num})"
+        elif choice == '10':
+            result = tangent(num)
+            desc = f"tan({num})"
+        elif choice == '11':
+            result = factorial(num)
+            desc = f"{num}!"
+
+        if result is not None:
+            print("Result:", result)
+            last_result = result
+            record = f"{desc} = {result}"
+            history.append(record)
+            with open("calc_history.txt", "a") as file:
+                file.write(record + "\n")
+
+    else:
+        print("Invalid option. Please choose from 1 to 13.")
